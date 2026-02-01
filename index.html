@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Her Gaurd- Women Safety App</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#fef2f2',
+                            100: '#fee2e2',
+                            200: '#fecaca',
+                            300: '#fca5a5',
+                            400: '#f87171',
+                            500: '#ef4444',
+                            600: '#dc2626',
+                            700: '#b91c1c',
+                            800: '#991b1b',
+                            900: '#7f1d1d',
+                        },
+                        secondary: {
+                            50: '#f8fafc',
+                            100: '#f1f5f9',
+                            200: '#e2e8f0',
+                            300: '#cbd5e1',
+                            400: '#94a3b8',
+                            500: '#64748b',
+                            600: '#475569',
+                            700: '#334155',
+                            800: '#1e293b',
+                            900: '#0f172a',
+                        }
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'shake': 'shake 0.82s cubic-bezier(.36,.07,.19,.97) both',
+                        'sos-pulse': 'sosPulse 2s infinite',
+                    },
+                    keyframes: {
+                        shake: {
+                            '10%, 90%': { transform: 'translate3d(-1px, 0, 0)' },
+                            '20%, 80%': { transform: 'translate3d(2px, 0, 0)' },
+                            '30%, 50%, 70%': { transform: 'translate3d(-4px, 0, 0)' },
+                            '40%, 60%': { transform: 'translate3d(4px, 0, 0)' }
+                        },
+                        sosPulse: {
+                            '0%': { boxShadow: '0 0 0 0 rgba(239, 68, 68, 0.7)' },
+                            '70%': { boxShadow: '0 0 0 50px rgba(239, 68, 68, 0)' },
+                            '100%': { boxShadow: '0 0 0 0 rgba(239, 68, 68, 0)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-secondary-900 text-white min-h-screen pb-24 overflow-x-hidden">
+    <!-- Header -->
+    <header class="sticky top-0 z-40 bg-secondary-900/80 backdrop-blur-md border-b border-secondary-800 px-4 py-4">
+        <div class="flex justify-between items-center max-w-md mx-auto">
+            <div class="flex items-center gap-2">
+                <div class="w-10 h-10 bg-gradient-to-br from-primary-500 to-primary-700 rounded-full flex items-center justify-center shadow-lg shadow-primary-500/30">
+                    <i data-feather="shield" class="w-5 h-5 text-white"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg leading-tight">HER GAURD</h1>
+                    <p class="text-xs text-secondary-400">Guardian Active</p>
+                </div>
+            </div>
+            <button id="profileBtn" class="w-10 h-10 rounded-full bg-secondary-800 flex items-center justify-center hover:bg-secondary-700 transition-colors">
+                <i data-feather="user" class="w-5 h-5 text-secondary-300"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-md mx-auto px-4 py-6 space-y-6">
+        
+        <!-- Status Bar -->
+        <div class="bg-gradient-to-r from-secondary-800 to-secondary-700 rounded-2xl p-4 flex items-center justify-between border border-secondary-700 shadow-xl">
+            <div class="flex items-center gap-3">
+                <div class="relative">
+                    <div class="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                    <div class="absolute inset-0 w-3 h-3 bg-green-500 rounded-full animate-ping opacity-75"></div>
+                </div>
+                <div>
+                    <p class="text-sm font-medium text-white">Safety Status</p>
+                    <p class="text-xs text-secondary-400">Location tracking active</p>
+                </div>
+            </div>
+            <div class="text-right">
+                <p class="text-xs text-secondary-400" id="currentTime">12:45 PM</p>
+                <p class="text-xs text-primary-400 font-medium" id="batteryLevel">85%</p>
+            </div>
+        </div>
+
+        <!-- SOS Emergency Button -->
+        <section class="relative py-4">
+            <div class="absolute inset-0 bg-primary-500/10 blur-3xl rounded-full"></div>
+            <div class="relative flex flex-col items-center">
+                <button id="sosBtn" class="w-48 h-48 rounded-full bg-gradient-to-br from-primary-500 via-primary-600 to-primary-700 shadow-2xl shadow-primary-600/50 flex flex-col items-center justify-center transform transition-all duration-200 active:scale-95 animate-sos-pulse border-4 border-primary-400/30 group">
+                    <i data-feather="alert-triangle" class="w-12 h-12 text-white mb-2 group-hover:scale-110 transition-transform"></i>
+                    <span class="text-3xl font-black text-white tracking-wider">SOS</span>
+                    <span class="text-xs text-primary-100 mt-1 font-medium">PRESS & HOLD</span>
+                </button>
+                <p class="mt-4 text-sm text-secondary-400 text-center">Press and hold for 3 seconds to alert emergency contacts</p>
+            </div>
+        </section>
+
+        <!-- Quick Actions Grid -->
+        <section class="grid grid-cols-2 gap-4">
+            <button onclick="triggerFakeCall()" class="bg-secondary-800 hover:bg-secondary-700 border border-secondary-700 rounded-2xl p-4 flex flex-col items-center gap-3 transition-all duration-300 hover:shadow-lg hover:shadow-secondary-800/50 group">
+                <div class="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <i data-feather="phone-incoming" class="w-6 h-6 text-blue-400"></i>
+                </div>
+                <span class="text-sm font-medium text-secondary-200">Fake Call</span>
+            </button>
+
+            <button onclick="shareLocation()" class="bg-secondary-800 hover:bg-secondary-700 border border-secondary-700 rounded-2xl p-4 flex flex-col items-center gap-3 transition-all duration-300 hover:shadow-lg hover:shadow-secondary-800/50 group">
+                <div class="w-12 h-12 rounded-full bg-green-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <i data-feather="map-pin" class="w-6 h-6 text-green-400"></i>
+                </div>
+                <span class="text-sm font-medium text-secondary-200">Share Location</span>
+            </button>
+
+            <button onclick="showHelplines()" class="bg-secondary-800 hover:bg-secondary-700 border border-secondary-700 rounded-2xl p-4 flex flex-col items-center gap-3 transition-all duration-300 hover:shadow-lg hover:shadow-secondary-800/50 group">
+                <div class="w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <i data-feather="phone" class="w-6 h-6 text-purple-400"></i>
+                </div>
+                <span class="text-sm font-medium text-secondary-200">Helplines</span>
+            </button>
+
+            <button onclick="safeRoute()" class="bg-secondary-800 hover:bg-secondary-700 border border-secondary-700 rounded-2xl p-4 flex flex-col items-center gap-3 transition-all duration-300 hover:shadow-lg hover:shadow-secondary-800/50 group">
+                <div class="w-12 h-12 rounded-full bg-amber-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <i data-feather="navigation" class="w-6 h-6 text-amber-400"></i>
+                </div>
+                <span class="text-sm font-medium text-secondary-200">Safe Route</span>
+            </button>
+        </section>
+
+        <!-- Emergency Contacts -->
+        <section class="bg-secondary-800/50 border border-secondary-700 rounded-2xl p-4 backdrop-blur-sm">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-semibold text-lg flex items-center gap-2">
+                    <i data-feather="users" class="w-5 h-5 text-primary-400"></i>
+                    Emergency Contacts
+                </h3>
+                <button class="text-xs text-primary-400 hover:text-primary-300 font-medium">Edit</button>
+            </div>
+            <div class="space-y-3" id="contactsList">
+                <div class="flex items-center justify-between bg-secondary-800 rounded-xl p-3 border border-secondary-700">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-primary-500/20 flex items-center justify-center">
+                            <span class="text-primary-400 font-bold">M</span>
+                        </div>
+                        <div>
+                            <p class="font-medium text-sm">Mom</p>
+                            <p class="text-xs text-secondary-400">+91 98765 43210</p>
+                        </div>
+                    </div>
+                    <button class="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center hover:bg-green-500/30 transition-colors" onclick="callNumber('+919876543210')">
+                        <i data-feather="phone" class="w-4 h-4 text-green-400"></i>
+                    </button>
+                </div>
+                <div class="flex items-center justify-between bg-secondary-800 rounded-xl p-3 border border-secondary-700">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center">
+                            <span class="text-blue-400 font-bold">D</span>
+                        </div>
+                        <div>
+                            <p class="font-medium text-sm">Dad</p>
+                            <p class="text-xs text-secondary-400">+91 98765 43211</p>
+                        </div>
+                    </div>
+                    <button class="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center hover:bg-green-500/30 transition-colors" onclick="callNumber('+919876543211')">
+                        <i data-feather="phone" class="w-4 h-4 text-green-400"></i>
+                    </button>
+                </div>
+            </div>
+            <button class="w-full mt-3 py-2 rounded-lg border border-dashed border-secondary-600 text-secondary-400 text-sm hover:border-primary-500 hover:text-primary-400 transition-colors flex items-center justify-center gap-2">
+                <i data-feather="plus" class="w-4 h-4"></i>
+                Add Contact
+            </button>
+        </section>
+
+        <!-- Safety Tips Carousel -->
+        <section class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-secondary-800 to-secondary-900 border border-secondary-700 p-4">
+            <div class="flex justify-between items-center mb-3">
+                <h3 class="font-semibold flex items-center gap-2">
+                    <i data-feather="book-open" class="w-5 h-5 text-amber-400"></i>
+                    Safety Tips
+                </h3>
+                <div class="flex gap-1">
+                    <div class="w-2 h-2 rounded-full bg-primary-500"></div>
+                    <div class="w-2 h-2 rounded-full bg-secondary-600"></div>
+                    <div class="w-2 h-2 rounded-full bg-secondary-600"></div>
+                </div>
+            </div>
+            <div class="relative h-24 overflow-hidden">
+                <div id="tipsCarousel" class="transition-transform duration-500">
+                    <div class="tip-slide">
+                        <p class="text-sm text-secondary-300 leading-relaxed">"Always share your live location with trusted contacts when traveling alone at night."</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Recent Alerts -->
+        <section class="bg-secondary-800/30 rounded-2xl p-4 border border-secondary-700/50">
+            <h3 class="font-semibold mb-3 flex items-center gap-2 text-sm uppercase tracking-wider text-secondary-400">
+                <i data-feather="activity" class="w-4 h-4"></i>
+                Recent Activity
+            </h3>
+            <div class="space-y-2 text-sm">
+                <div class="flex items-center gap-3 text-secondary-300">
+                    <div class="w-2 h-2 rounded-full bg-green-500"></div>
+                    <span>Location shared with Mom</span>
+                    <span class="ml-auto text-xs text-secondary-500">2m ago</span>
+                </div>
+                <div class="flex items-center gap-3 text-secondary-300">
+                    <div class="w-2 h-2 rounded-full bg-blue-500"></div>
+                    <span>Safe route activated</span>
+                    <span class="ml-auto text-xs text-secondary-500">1h ago</span>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-secondary-900/90 backdrop-blur-lg border-t border-secondary-800 px-6 py-3 z-50">
+        <div class="max-w-md mx-auto flex justify-between items-center">
+            <a href="#" class="flex flex-col items-center gap-1 text-primary-400">
+                <i data-feather="home" class="w-6 h-6"></i>
+                <span class="text-[10px] font-medium">Home</span>
+            </a>
+            <a href="#" class="flex flex-col items-center gap-1 text-secondary-500 hover:text-secondary-300 transition-colors">
+                <i data-feather="map" class="w-6 h-6"></i>
+                <span class="text-[10px] font-medium">Track</span>
+            </a>
+            <div class="w-12"></div> <!-- Spacer for SOS -->
+            <a href="#" class="flex flex-col items-center gap-1 text-secondary-500 hover:text-secondary-300 transition-colors">
+                <i data-feather="message-circle" class="w-6 h-6"></i>
+                <span class="text-[10px] font-medium">Chat</span>
+            </a>
+            <a href="#" class="flex flex-col items-center gap-1 text-secondary-500 hover:text-secondary-300 transition-colors">
+                <i data-feather="settings" class="w-6 h-6"></i>
+                <span class="text-[10px] font-medium">Settings</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- Floating SOS Button (Bottom Center) -->
+    <button id="floatingSos" class="fixed bottom-6 left-1/2 transform -translate-x-1/2 w-14 h-14 bg-gradient-to-br from-primary-500 to-primary-700 rounded-full shadow-2xl shadow-primary-600/50 flex items-center justify-center z-50 border-4 border-secondary-900 hover:scale-110 transition-transform">
+        <i data-feather="alert-triangle" class="w-6 h-6 text-white"></i>
+    </button>
+
+    <!-- Fake Call Modal -->
+    <div id="fakeCallModal" class="fixed inset-0 bg-black z-50 hidden flex-col items-center justify-center">
+        <div class="absolute inset-0 bg-gradient-to-b from-secondary-800 to-black opacity-90"></div>
+        <div class="relative z-10 flex flex-col items-center animate-pulse-slow">
+            <div class="w-24 h-24 rounded-full bg-secondary-700 flex items-center justify-center mb-4 border-4 border-secondary-600">
+                <i data-feather="user" class="w-12 h-12 text-secondary-400"></i>
+            </div>
+            <h2 class="text-2xl font-bold mb-1">Incoming Call</h2>
+            <p class="text-xl text-secondary-300 mb-8">Police Station</p>
+            <div class="flex gap-8">
+                <button onclick="closeFakeCall()" class="w-16 h-16 rounded-full bg-red-500 flex items-center justify-center hover:bg-red-600 transition-colors shadow-lg">
+                    <i data-feather="phone-off" class="w-8 h-8 text-white"></i>
+                </button>
+                <button onclick="closeFakeCall()" class="w-16 h-16 rounded-full bg-green-500 flex items-center justify-center hover:bg-green-600 transition-colors shadow-lg animate-pulse">
+                    <i data-feather="phone" class="w-8 h-8 text-white"></i>
+                </button>
+            </div>
+            <p class="mt-8 text-sm text-secondary-500">Swipe up to answer</p>
+        </div>
+    </div>
+
+    <!-- SOS Activation Modal -->
+    <div id="sosModal" class="fixed inset-0 bg-primary-900/95 z-[60] hidden flex-col items-center justify-center backdrop-blur-sm">
+        <div class="text-center space-y-6 p-6">
+            <div class="w-32 h-32 rounded-full bg-white/10 flex items-center justify-center animate-pulse mx-auto border-4 border-white/30">
+                <i data-feather="alert-octagon" class="w-16 h-16 text-white"></i>
+            </div>
+            <div>
+                <h2 class="text-3xl font-black text-white mb-2">SOS ACTIVATED</h2>
+                <p class="text-primary-200">Alerting emergency contacts...</p>
+            </div>
+            <div class="space-y-3 w-full max-w-xs">
+                <div class="bg-white/10 rounded-lg p-3 flex items-center gap-3">
+                    <i data-feather="map-pin" class="w-5 h-5 text-primary-300"></i>
+                    <span class="text-sm">Sending location data</span>
+                </div>
+                <div class="bg-white/10 rounded-lg p-3 flex items-center gap-3">
+                    <i data-feather="mic" class="w-5 h-5 text-primary-300"></i>
+                    <span class="text-sm">Recording audio</span>
+                </div>
+                <div class="bg-white/10 rounded-lg p-3 flex items-center gap-3">
+                    <i data-feather="video" class="w-5 h-5 text-primary-300"></i>
+                    <span class="text-sm">Capturing video</span>
+                </div>
+            </div>
+            <button onclick="cancelSOS()" class="mt-6 px-8 py-3 bg-white text-primary-900 rounded-full font-bold hover:bg-primary-50 transition-colors">
+                Cancel Alert
+            </button>
+            <p class="text-xs text-primary-300">Auto-cancel in 10 seconds</p>
+        </div>
+    </div>
+
+    <script src="frontend/script.js"></script>
+
+<button onclick="callBackend()">Click Me</button>
+<script>
+function callBackend() {
+  alert("Button clicked");   
+  fetch("http://127.0.0.1:5000/hello")
+    .then(response => response.json())
+    .then(data => alert(data.status));
+}     
+ </script>      
+</body>
+</html>
+    <script>feather.replace();</script>
+</body>
+</html>
